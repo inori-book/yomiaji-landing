@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>YOMIAJI （βテスト版） | 読み味で探す”毒書”体験</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="読後感＝読み味で本を探す読書アプリ『YOMIAJI（βテスト版）』の実験室。ホラー/耽美/背徳の読書体験を。">
+  <!-- OG / Twitter -->
+  <meta property="og:title" content="YOMIAJI （βテスト版） | 読み味で探す毒書体験">
+  <meta property="og:description" content="読後感＝読み味で本を探す読書アプリ。禁忌の本棚を開けよう。">
+  <meta property="og:image" content="assets/og.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Tailwind (CDNビルド) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{
+      --ink:#0b0a0a; --paper:#f7f1e3; --burgundy:#6e0f2f; --burgundy-2:#3b0b1b; --sepia:#b08968;
+    }
+    body{ font-family:'Noto Serif JP','Cormorant Garamond',serif; background:radial-gradient(1200px 800px at 20% -10%, #1a1417, #0b0a0a); color:#eae6e1;}
+    .brand{ font-family:'Cormorant Garamond','Noto Serif JP',serif; letter-spacing:.06em }
+    .btn{ display:block; width:100%; border-radius:16px; padding:14px 18px; font-weight:600; border:1px solid #5f0f29; background:linear-gradient(90deg,var(--burgundy),var(--burgundy-2));}
+    .btn:hover{ filter:saturate(1.1) brightness(1.05)}
+    .pill{ background:rgba(110,15,47,.18); border:1px solid rgba(110,15,47,.5); }
+    .glass{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); backdrop-filter: blur(6px);}
+  </style>
+  <!-- DNS prefetch (少しだけ効く) -->
+  <link rel="dns-prefetch" href="https://YOUR-APP-HOST.streamlit.app">
+  <link rel="icon" href="assets/favicon.svg">
+  <!-- Analytics（Plausible推奨：差し替え） -->
+  <!-- <script defer data-domain="yomiaji.example" src="https://plausible.io/js/script.js"></script> -->
+  <!-- GA4を使うなら：
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js', new Date());gtag('config','G-XXXXXXX');</script> -->
+</head>
+<body>
+  <main class="min-h-screen">
+    <header class="max-w-4xl mx-auto px-5 py-6 flex items-center justify-between">
+      <div class="brand text-2xl tracking-wide">YOMIAJI<span class="opacity-60 text-sm ml-2">β</span></div>
+      <div class="pill px-3 py-1 rounded-full text-xs opacity-90">実験版 / 起動に数秒かかることがあります</div>
+    </header>
+
+    <section class="max-w-4xl mx-auto px-5 pt-10 pb-16 grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="brand text-4xl md:text-5xl leading-tight">
+          読み味で本を選ぶ、<br><span class="text-[var(--sepia)]">禁忌のアーカイブ</span>
+        </h1>
+        <p class="mt-4 text-base/7 opacity-90">
+          普通の「おすすめ」では辿り着けない、耽美・退廃・怪奇の本棚へ。<br>
+          読後感＝読み味で、本を発掘する実験室です。
+        </p>
+
+        <!-- 起動状態 -->
+        <div id="status" class="mt-6 text-sm opacity-80">アプリを起こしています…</div>
+
+        <!-- CTA -->
+        <a id="cta" class="btn mt-3 text-center" href="#" rel="nofollow">β実験室に入る</a>
+        <p class="text-xs opacity-70 mt-2">※初回は10秒前後かかる場合があります</p>
+      </div>
+
+      <div class="glass rounded-2xl overflow-hidden">
+        <img src="assets/key-visual.webp" alt="YOMIAJIのゴシックなキービジュアル" class="w-full h-full object-cover">
+      </div>
+    </section>
+
+    <!-- 使い方（3ステップ） -->
+    <section class="max-w-4xl mx-auto px-5 pb-20 grid md:grid-cols-3 gap-5">
+      <div class="glass p-5 rounded-xl">
+        <div class="text-lg mb-2">1. 言葉を投げる</div>
+        <p class="opacity-80 text-sm">「耽美」「不気味」「ねっとり」など、読み味の言葉を入力。</p>
+      </div>
+      <div class="glass p-5 rounded-xl">
+        <div class="text-lg mb-2">2. 本棚を掘る</div>
+        <p class="opacity-80 text-sm">検索結果から、書影と解説で感触を確かめる。</p>
+      </div>
+      <div class="glass p-5 rounded-xl">
+        <div class="text-lg mb-2">3. 感想を返す</div>
+        <p class="opacity-80 text-sm">当たり/外れを1タップで。実験の精度が上がります。</p>
+      </div>
+    </section>
+
+    <footer class="max-w-4xl mx-auto px-5 pb-12 text-xs opacity-70">
+      <a class="underline" href="https://forms.gle/xxxxxxxx" target="_blank">バグ報告・要望フォーム</a> ／
+      <a class="underline" href="mailto:hello@yomiaji.example">連絡先</a>
+      <div class="mt-2">© YOMIAJI LAB</div>
+    </footer>
+  </main>
+
+  <script>
+    // ====== 設定 ======
+    const APP_URL = "https://YOUR-APP-HOST.streamlit.app";
+    const PING_URL = APP_URL + "/?ping=1"; // app.py側でst.query_params['ping']=="1"→即stopするやつ
+
+    const statusEl = document.getElementById("status");
+    const ctaEl = document.getElementById("cta");
+
+    // ページ読み込み時にプリウォーム
+    let warmed = false;
+    async function prewarm(timeoutMs = 10000){
+      statusEl.textContent = "アプリを起こしています…";
+      try{
+        const ctrl = new AbortController();
+        const id = setTimeout(()=>ctrl.abort(), timeoutMs);
+        // no-corsでも実サーバを叩けば起動はする
+        await fetch(PING_URL, { mode: "no-cors", keepalive: true, signal: ctrl.signal });
+        clearTimeout(id);
+        warmed = true;
+        statusEl.textContent = "起動完了。入室できます。";
+      }catch(e){
+        statusEl.textContent = "起動中…数秒お待ちください（通信が混み合うと遅れることがあります）";
+      }
+    }
+
+    // CTAクリック：別タブで開く（LPは残す）
+    ctaEl.addEventListener("click", (e)=>{
+      e.preventDefault();
+      window.open(APP_URL, "_blank", "noopener");
+    });
+
+    // 自動プリウォーム + 数秒おきにリトライ（最大3回）
+    document.addEventListener("DOMContentLoaded", async ()=>{
+      for(let i=0;i<3 && !warmed;i++){
+        await prewarm(8000);
+        if(!warmed) await new Promise(r=>setTimeout(r, 3000));
+      }
+    });
+  </script>
+</body>
+</html>
