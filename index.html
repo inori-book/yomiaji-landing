@@ -52,11 +52,8 @@
           読後感＝読み味から、あなたに合った1冊を探してください。
         </p>
 
-        <!-- 起動状態 -->
-        <div id="status" class="mt-6 text-sm opacity-80">起動しています…</div>
-
         <!-- CTA -->
-        <a id="cta" class="btn mt-3 text-center max-w-md mx-auto" href="#" rel="nofollow">アクセスはこちら</a>
+        <a id="cta" class="btn mt-6 text-center max-w-md mx-auto opacity-50 cursor-not-allowed" href="#" rel="nofollow">起動中…</a>
         <p class="text-xs opacity-70 mt-2">※初回起動には10秒前後かかる場合があります。</p>
       </div>
 
@@ -75,7 +72,7 @@
       </div>
       <div class="glass p-5 rounded-xl">
         <div class="text-lg mb-2">2. 本を選ぶ</div>
-        <p class="opacity-80 text-sm">検索したキーワードを感想中に含む本がリストアップされます。購入も可能です（楽天ブックスにリンク）。</p>
+        <p class="opacity-80 text-sm">検索したキーワードを感想中に含む本がリストアップされます。<br>購入も可能です（楽天ブックスから）。</p>
       </div>
       <div class="glass p-5 rounded-xl">
         <div class="text-lg mb-2">3. 感想を返す</div>
@@ -95,13 +92,15 @@
     const APP_URL = "https://book-sentiment-search-kzufxfzgrgwnnmji6g55am.streamlit.app";
     const PING_URL = APP_URL + "/?ping=1"; // app.py側でst.query_params['ping']=="1"→即stopするやつ
 
-    const statusEl = document.getElementById("status");
     const ctaEl = document.getElementById("cta");
 
     // ページ読み込み時にプリウォーム
     let warmed = false;
     async function prewarm(timeoutMs = 10000){
-      statusEl.textContent = "起動しています…";
+      ctaEl.textContent = "起動中…";
+      ctaEl.classList.add("opacity-50", "cursor-not-allowed");
+      ctaEl.classList.remove("opacity-100", "cursor-pointer");
+      
       try{
         const ctrl = new AbortController();
         const id = setTimeout(()=>ctrl.abort(), timeoutMs);
@@ -109,16 +108,20 @@
         await fetch(PING_URL, { mode: "no-cors", keepalive: true, signal: ctrl.signal });
         clearTimeout(id);
         warmed = true;
-        statusEl.textContent = "起動完了。アクセスできます";
+        ctaEl.textContent = "アクセスはこちら";
+        ctaEl.classList.remove("opacity-50", "cursor-not-allowed");
+        ctaEl.classList.add("opacity-100", "cursor-pointer");
       }catch(e){
-        statusEl.textContent = "起動中…数秒お待ちください（通信が混み合っている場合、時間がかかることがあります）";
+        ctaEl.textContent = "起動中…";
       }
     }
 
     // CTAクリック：別タブで開く（LPは残す）
     ctaEl.addEventListener("click", (e)=>{
       e.preventDefault();
-      window.open(APP_URL, "_blank", "noopener");
+      if (warmed) {
+        window.open(APP_URL, "_blank", "noopener");
+      }
     });
 
     // 自動プリウォーム + 数秒おきにリトライ（最大3回）
