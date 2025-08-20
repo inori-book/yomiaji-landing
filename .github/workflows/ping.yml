@@ -1,0 +1,14 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'  # 毎1分に一度
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP request to Streamlit app
+        run: |
+          curl -sSf https://book-sentiment-search-kzufxfzgrgwnnmji6g55am.streamlit.app || echo "App not responding"
